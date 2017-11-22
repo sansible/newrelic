@@ -1,0 +1,10 @@
+---
+
+- name: restart newrelic sysmond
+  become: yes
+  service:
+    name: newrelic-sysmond
+    state: restarted
+  when:
+    - sansible_newrelic.integrations.sysmond.enabled
+    - sansible_newrelic.integrations.sysmond.start_on_boot

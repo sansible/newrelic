@@ -1,0 +1,88 @@
+---
+
+- name: Configure New Relic sysmond
+  become: yes
+  ini_file:
+    dest: /etc/newrelic/nrsysmond.cfg
+    group: "{{ sansible_newrelic.group }}"
+    mode: 0640
+    no_extra_spaces: yes
+    owner: "{{ sansible_newrelic.user }}"
+    section: "{{ item.section | default(None) }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  when: sansible_newrelic.integrations.sysmond.enabled
+  with_items: "{{ [
+        {
+          'option': 'license_key',
+          'value': sansible_newrelic.license_key
+        },
+        {
+          'option': 'loglevel',
+          'value': sansible_newrelic.log_level
+        },
+        {
+          'option': 'labels',
+          'value': sansible_newrelic.labels
+        }
+      ] + sansible_newrelic.integrations.sysmond.ini_config
+    }}"
+  notify:
+    - restart newrelic sysmond
+
+- name: Start New Relic Sysmond if start on boot enabled
+  become: yes
+  service:
+    name: newrelic-sysmond
+    state: started
+  when:
+    - sansible_newrelic.integrations.sysmond.enabled
+    - sansible_newrelic.integrations.sysmond.start_on_boot
+
+- name: Configure New Relic PHP integration
+  become: yes
+  ini_file:
+    dest: "{{ sansible_newrelic.integrations.php.ini_paths.base }}"
+    group: "{{ sansible_newrelic.group }}"
+    mode: 0640
+    owner: "{{ sansible_newrelic.user }}"
+    section: "{{ item.section | default(None) }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  when: sansible_newrelic.integrations.php.enabled
+  with_items: "{{ [
+        {
+          'option': 'extension',
+          'value': '/usr/lib/php/20151012/newrelic.so'
+        },
+        {
+          'option': 'newrelic.license',
+          'section': 'newrelic',
+          'value': sansible_newrelic.license_key
+        },
+        {
+          'option': 'newrelic.loglevel',
+          'section': 'newrelic',
+          'value': sansible_newrelic.log_level
+        },
+        {
+          'option': 'newrelic.appname',
+          'section': 'newrelic',
+          'value': sansible_newrelic.appname_prefix + sansible_newrelic.appname
+        },
+        {
+          'option': 'newrelic.daemon.loglevel',
+          'section': 'newrelic',
+          'value': sansible_newrelic.log_level
+        }
+      ] + sansible_newrelic.integrations.php.ini_config
+    }}"
+
+- name: Enable New Relic PHP integration
+  become: yes
+  file:
+    dest: "{{ item }}"
+    src: "{{ sansible_newrelic.integrations.php.ini_paths.base }}"
+    state: link
+  with_items: "{{ sansible_newrelic.integrations.php.ini_paths.links }}"
+  when: sansible_newrelic.integrations.php.enabled

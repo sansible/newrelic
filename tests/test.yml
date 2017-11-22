@@ -1,0 +1,67 @@
+---
+
+- name: Test New Relic role
+  hosts: all
+
+  pre_tasks:
+    - name: Update apt
+      become: yes
+      apt:
+        cache_valid_time: 1800
+        update_cache: yes
+      tags:
+        - build
+
+  roles:
+    - role: sansible.php
+      php:
+        version: php7.0
+        fpm:
+          bin: php-fpm7.0
+        paths:
+            etc: /etc/php/7.0
+            fpm_pool: /etc/php/7.0/fpm/pool.d
+
+    - role: sansible.newrelic
+      sansible_newrelic:
+        appname: sansible-newrelic
+        integrations:
+          php:
+            enabled: true
+          sysmond:
+            enabled: true
+        labels: "org:sansible,role:newrelic"
+        license_key: 123456789123456789123456789123456789
+
+  tasks:
+    - name: Grab PHP integration ini file contents
+      become: yes
+      slurp:
+        src: "{{ sansible_newrelic.integrations.php.ini_paths.base }}"
+      register: php_ini_config
+      tags:
+        - assert
+
+    - name: Test PHP integration ini file contents
+      become: yes
+      assert:
+        that:
+          - php_ini_config['content'] | b64decode | search('newrelic\.loglevel \= error')
+      tags:
+        - assert
+
+    - name: Grab Sysmond integration ini file contents
+      become: yes
+      slurp:
+        src: /etc/newrelic/nrsysmond.cfg
+      register: sysmond_ini_config
+      tags:
+        - assert
+
+    - name: Test Sysmond integration ini file contents
+      become: yes
+      assert:
+        that:
+          - sysmond_ini_config['content'] | b64decode | search('loglevel\=error')
+      tags:
+        - assert

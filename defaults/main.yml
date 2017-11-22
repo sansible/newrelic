@@ -1,0 +1,32 @@
+---
+
+sansible_newrelic:
+  appname: default
+  appname_prefix: ""
+  group: newrelic
+  integrations:
+    php:
+      enabled: false
+      ini_paths:
+        base: /etc/php/7.0/mods-available/newrelic.ini
+        links:
+          - /etc/php/7.0/fpm/conf.d/newrelic.ini
+          - /etc/php/7.0/cli/conf.d/newrelic.ini
+      ini_config: [ ]
+        # - option: number_of_cats
+        #   section: mammals
+        #   value: 42
+      version: "7.6.*"
+    sysmond:
+      enabled: false
+      ini_config: [ ]
+        # - option: number_of_cats
+        #   section: mammals
+        #   value: 42
+      start_on_boot: no
+      version: "2.3.*"
+  # Format is: key:value,key:value
+  labels: ~
+  log_level: "error"
+  license_key: "changeme"
+  user: newrelic

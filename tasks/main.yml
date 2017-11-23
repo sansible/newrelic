@@ -1,0 +1,11 @@
+---
+
+- name: Install New Relic
+  include: install.yml
+  tags:
+    - build
+
+- name: Configure New Relic
+  include: configure.yml
+  tags:
+    - configure

@@ -1,0 +1,21 @@
+---
+
+galaxy_info:
+  description: "Installs New Relic."
+  license: MIT
+  min_ansible_version: 2.1
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+  categories:
+    - development
+
+dependencies:
+  - role: sansible.users_and_groups
+    users_and_groups:
+      groups:
+        - name: "{{ sansible_newrelic.group }}"
+      users:
+        - name: "{{ sansible_newrelic.user }}"
+          group: "{{ sansible_newrelic.group }}"

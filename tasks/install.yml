@@ -1,0 +1,41 @@
+---
+
+- name: Install New Relic dependencies
+  become: yes
+  apt:
+    pkg: apt-transport-https
+    state: present
+
+- name: Ensure New Relic PGP key is known to the server
+  become: yes
+  apt_key:
+    id: 548C16BF
+    keyserver: hkp://keyserver.ubuntu.com:80
+    state: present
+
+- name: Add New Relic APT repository
+  become: yes
+  apt_repository:
+    repo: "deb http://apt.newrelic.com/debian/ newrelic non-free"
+    update_cache: yes
+
+- name: Install New Relic Sysmond
+  become: yes
+  apt:
+    pkg: "newrelic-sysmond={{ sansible_newrelic.integrations.sysmond.version }}"
+    state: present
+  when: sansible_newrelic.integrations.sysmond.enabled
+
+- name: Disable New Relic Sysmond service on boot
+  become: yes
+  service:
+    enabled: false
+    name: newrelic-sysmond
+  when: sansible_newrelic.integrations.sysmond.enabled
+
+- name: Install New Relic PHP integration
+  become: yes
+  apt:
+    pkg: "newrelic-php5={{ sansible_newrelic.integrations.php.version }}"
+    state: present
+  when: sansible_newrelic.integrations.php.enabled

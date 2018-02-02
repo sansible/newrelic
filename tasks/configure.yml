@@ -44,12 +44,14 @@
   ini_file:
     dest: "{{ sansible_newrelic.integrations.php.ini_paths.base }}"
     group: "{{ sansible_newrelic.group }}"
-    mode: 0640
+    mode: 0644
     owner: "{{ sansible_newrelic.user }}"
     section: "{{ item.section | default(None) }}"
     option: "{{ item.option }}"
     value: "{{ item.value }}"
-  when: sansible_newrelic.integrations.php.enabled
+  when:
+    - sansible_newrelic.integrations.php.enabled
+    - sansible_newrelic.integrations.php.start_on_boot
   with_items: "{{ [
         {
           'option': 'extension',
@@ -85,4 +87,6 @@
     src: "{{ sansible_newrelic.integrations.php.ini_paths.base }}"
     state: link
   with_items: "{{ sansible_newrelic.integrations.php.ini_paths.links }}"
-  when: sansible_newrelic.integrations.php.enabled
+  when:
+    - sansible_newrelic.integrations.php.enabled
+    - sansible_newrelic.integrations.php.start_on_boot

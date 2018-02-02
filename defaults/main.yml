@@ -10,13 +10,14 @@ sansible_newrelic:
       ini_paths:
         base: /etc/php/7.0/mods-available/newrelic.ini
         links:
-          - /etc/php/7.0/fpm/conf.d/newrelic.ini
-          - /etc/php/7.0/cli/conf.d/newrelic.ini
+          - /etc/php/7.0/fpm/conf.d/20-newrelic.ini
+          - /etc/php/7.0/cli/conf.d/20-newrelic.ini
       ini_config: [ ]
         # - option: number_of_cats
         #   section: mammals
         #   value: 42
-      version: "7.6.*"
+      start_on_boot: no
+      version: "7.7.*"
     sysmond:
       enabled: false
       ini_config: [ ]

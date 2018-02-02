@@ -39,3 +39,7 @@
     pkg: "newrelic-php5={{ sansible_newrelic.integrations.php.version }}"
     state: present
   when: sansible_newrelic.integrations.php.enabled
+  with_items:
+    - "newrelic-daemon={{ sansible_newrelic.integrations.php.version }}"
+    - "newrelic-php5-common={{ sansible_newrelic.integrations.php.version }}"
+    - "newrelic-php5={{ sansible_newrelic.integrations.php.version }}"

@@ -57,6 +57,18 @@ This role uses tags: **build** and **configure**
 See the [Examples](#examples) section for details on how to setup these
 integrations.
 
+### enabled and start_on_boot flags
+
+Integrations should have two flags to activate them, enabled and start_on_boot.
+
+The enabled flag covers the installation of the integration and is normally
+run via the build tag; useful for baking the integration packages
+into an image without writing any config or starting any services.
+
+The start_on_boot flag will start the integration and write any required
+config files, executed via the configure tag. This tag can be used for
+activating an integration on a per environment basis.
+
 ### PHP
 
 Installs New Relic's PHP integration and configures an INI file with symlinks
@@ -69,8 +81,9 @@ Installs New Relic's system metrics integration and configures an INI file with
 settings. Comes with default settings that setup license key, log levels and
 instance labels.
 
-By default the service for this integration is not enabled on boot, this is so
-you can start the service once an instance has finished booting. The intention
+By default the start_on_boot flag for this integration is not enabled on boot,
+in addition to allowing you to enable the service per environment you can also
+start the service elsewhere once an instance has finished booting. The intention
 here is to prevent false alerts triggered by the high saturation encountered
 during OS boot.
 
@@ -112,6 +125,7 @@ Enable PHP7 integration:
         integrations:
           php:
             enabled: true
+            start_on_boot: yes
 ```
 
 Enable PHP5 integration:
@@ -130,6 +144,7 @@ Enable PHP5 integration:
             ini_paths:
               base: /etc/php/5.0/mods-available/newrelic.ini
               links:
-                - /etc/php/5.0/fpm/conf.d/newrelic.ini
-                - /etc/php/5.0/cli/conf.d/newrelic.ini
+                - /etc/php/5.0/fpm/conf.d/20-newrelic.ini
+                - /etc/php/5.0/cli/conf.d/20-newrelic.ini
+            start_on_boot: yes
 ```

@@ -28,6 +28,7 @@
         integrations:
           php:
             enabled: true
+            start_on_boot: true
           sysmond:
             enabled: true
         labels: "org:sansible,role:newrelic"

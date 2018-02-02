@@ -23,22 +23,18 @@
             fpm_pool: /etc/php/7.0/fpm/pool.d
 
     - role: sansible.newrelic
-      sansible_newrelic:
-        appname: sansible-newrelic
-        integrations:
-          php:
-            enabled: true
-            start_on_boot: true
-          sysmond:
-            enabled: true
-        labels: "org:sansible,role:newrelic"
-        license_key: 123456789123456789123456789123456789
+      sansible_newrelic_appname: sansible-newrelic
+      sansible_newrelic_integrations_php_enabled: true
+      sansible_newrelic_integrations_php_start_on_boot: true
+      sansible_newrelic_integrations_sysmond_enabled: true
+      sansible_newrelic_labels: "org:sansible,role:newrelic"
+      sansible_newrelic_license_key: 123456789123456789123456789123456789
 
   tasks:
     - name: Grab PHP integration ini file contents
       become: yes
       slurp:
-        src: "{{ sansible_newrelic.integrations.php.ini_paths.base }}"
+        src: "{{ sansible_newrelic_integrations_php_ini_paths_base }}"
       register: php_ini_config
       tags:
         - assert

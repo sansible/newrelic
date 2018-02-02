@@ -22,24 +22,24 @@
 - name: Install New Relic Sysmond
   become: yes
   apt:
-    pkg: "newrelic-sysmond={{ sansible_newrelic.integrations.sysmond.version }}"
+    pkg: "newrelic-sysmond={{ sansible_newrelic_integrations_sysmond_version }}"
     state: present
-  when: sansible_newrelic.integrations.sysmond.enabled
+  when: sansible_newrelic_integrations_sysmond_enabled
 
 - name: Disable New Relic Sysmond service on boot
   become: yes
   service:
     enabled: false
     name: newrelic-sysmond
-  when: sansible_newrelic.integrations.sysmond.enabled
+  when: sansible_newrelic_integrations_sysmond_enabled
 
 - name: Install New Relic PHP integration
   become: yes
   apt:
-    pkg: "newrelic-php5={{ sansible_newrelic.integrations.php.version }}"
+    pkg: "newrelic-php5={{ sansible_newrelic_integrations_php_version }}"
     state: present
-  when: sansible_newrelic.integrations.php.enabled
+  when: sansible_newrelic_integrations_php_enabled
   with_items:
-    - "newrelic-daemon={{ sansible_newrelic.integrations.php.version }}"
-    - "newrelic-php5-common={{ sansible_newrelic.integrations.php.version }}"
-    - "newrelic-php5={{ sansible_newrelic.integrations.php.version }}"
+    - "newrelic-daemon={{ sansible_newrelic_integrations_php_version }}"
+    - "newrelic-php5-common={{ sansible_newrelic_integrations_php_version }}"
+    - "newrelic-php5={{ sansible_newrelic_integrations_php_version }}"

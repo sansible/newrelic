@@ -15,7 +15,7 @@ dependencies:
   - role: sansible.users_and_groups
     users_and_groups:
       groups:
-        - name: "{{ sansible_newrelic.group }}"
+        - name: "{{ sansible_newrelic_group }}"
       users:
-        - name: "{{ sansible_newrelic.user }}"
-          group: "{{ sansible_newrelic.group }}"
+        - name: "{{ sansible_newrelic_user }}"
+          group: "{{ sansible_newrelic_group }}"

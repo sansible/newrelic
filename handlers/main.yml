@@ -6,5 +6,5 @@
     name: newrelic-sysmond
     state: restarted
   when:
-    - sansible_newrelic.integrations.sysmond.enabled
-    - sansible_newrelic.integrations.sysmond.start_on_boot
+    - sansible_newrelic_integrations_sysmond_enabled
+    - sansible_newrelic_integrations_sysmond_start_on_boot

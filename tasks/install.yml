@@ -36,10 +36,10 @@
 - name: Install New Relic PHP integration
   become: yes
   apt:
-    pkg: "newrelic-php5={{ sansible_newrelic_integrations_php_version }}"
+    pkg: "{{ item }}"
     state: present
   when: sansible_newrelic_integrations_php_enabled
   with_items:
-    - "newrelic-daemon={{ sansible_newrelic_integrations_php_version }}"
     - "newrelic-php5-common={{ sansible_newrelic_integrations_php_version }}"
+    - "newrelic-daemon={{ sansible_newrelic_integrations_php_version }}"
     - "newrelic-php5={{ sansible_newrelic_integrations_php_version }}"

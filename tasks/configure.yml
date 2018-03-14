@@ -43,9 +43,7 @@
   become: yes
   ini_file:
     dest: "{{ sansible_newrelic_integrations_php_ini_paths_base }}"
-    group: "{{ sansible_newrelic_group }}"
-    mode: 0640
-    owner: "{{ sansible_newrelic_user }}"
+    mode: 0644
     section: "{{ item.section | default(None) }}"
     option: "{{ item.option }}"
     value: "{{ item.value }}"

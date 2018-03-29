@@ -1,10 +1,10 @@
 ---
 
-- name: restart newrelic sysmond
+- name: restart newrelic infra
   become: yes
   service:
-    name: newrelic-sysmond
+    name: newrelic-infra
     state: restarted
   when:
-    - sansible_newrelic_integrations_sysmond_enabled
-    - sansible_newrelic_integrations_sysmond_start_on_boot
+    - sansible_newrelic_integrations_infra_enabled
+    - sansible_newrelic_integrations_infra_start_on_boot

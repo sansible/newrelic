@@ -7,7 +7,7 @@ Develop: [![Build Status](https://travis-ci.org/sansible/newrelic.svg?branch=dev
 * [Tags](#tags)
 * [Examples](#examples)
 
-This role installs Newrelic integrations, currently sysmond and php integrations
+This role installs Newrelic integrations, currently infra and php integrations
 are available.
 
 
@@ -20,7 +20,7 @@ To install run `ansible-galaxy install sansible.newrelic` or add this to your
 
 ```YAML
 - name: sansible.newrelic
-  version: v2.0
+  version: v2.1
 ```
 
 and run `ansible-galaxy install -p ./roles -r roles.yml`
@@ -61,7 +61,7 @@ Installs New Relic's PHP integration and configures an INI file with symlinks
 to this file to enable it. Comes with default settings that setup license key,
 log levels, app name and extension location.
 
-### Sysmond
+### Infra
 
 Installs New Relic's system metrics integration and configures an INI file with
 settings. Comes with default settings that setup license key, log levels and
@@ -78,7 +78,7 @@ during OS boot.
 
 ## Examples
 
-Enable New Relic sysmond integration:
+Enable New Relic infra integration:
 
 ```YAML
 - name: Install and configure newrelic
@@ -86,9 +86,11 @@ Enable New Relic sysmond integration:
 
   roles:
     - role: sansible.newrelic
-      sansible_newrelic_integrations_sysmond_enabled: true
-      sansible_newrelic_integrations_sysmond_start_on_boot: true
-      sansible_newrelic_labels: "org:sansible,role:newrelic"
+      sansible_newrelic_integrations_infra_enabled: yes
+      sansible_newrelic_integrations_infra_start_on_boot: yes
+      sansible_newrelic_labels:
+        org: sansible
+        role: newrelic
       sansible_newrelic_license_key: 123456789123456789123456789123456789
 ```
 
@@ -100,8 +102,8 @@ Enable PHP7 integration:
 
   roles:
     - role: sansible.newrelic
-      sansible_newrelic_integrations_php_enabled: true
-      sansible_newrelic_integrations_php_start_on_boot: true
+      sansible_newrelic_integrations_php_enabled: yes
+      sansible_newrelic_integrations_php_start_on_boot: yes
       sansible_newrelic_license_key: 123456789123456789123456789123456789
 ```
 
@@ -113,11 +115,11 @@ Enable PHP5 integration:
 
   roles:
     - role: sansible.newrelic
-      sansible_newrelic_integrations_php_enabled: true
+      sansible_newrelic_integrations_php_enabled: yes
       sansible_newrelic_integrations_php_ini_paths_base: /etc/php/5.0/mods-available/newrelic.ini
       sansible_newrelic_integrations_php_ini_paths_links:
         - /etc/php/5.0/fpm/conf.d/20-newrelic.ini
         - /etc/php/5.0/cli/conf.d/20-newrelic.ini
-      sansible_newrelic_integrations_php_start_on_boot: true
+      sansible_newrelic_integrations_php_start_on_boot: yes
       sansible_newrelic_license_key: 123456789123456789123456789123456789
 ```

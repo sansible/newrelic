@@ -13,9 +13,8 @@ galaxy_info:
 
 dependencies:
   - role: sansible.users_and_groups
-    users_and_groups:
-      groups:
-        - name: "{{ sansible_newrelic_group }}"
-      users:
-        - name: "{{ sansible_newrelic_user }}"
-          group: "{{ sansible_newrelic_group }}"
+    sansible_users_and_groups_groups:
+      - name: "{{ sansible_newrelic_group }}"
+    sansible_users_and_groups_users:
+      - name: "{{ sansible_newrelic_user }}"
+        group: "{{ sansible_newrelic_group }}"

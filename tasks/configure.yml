@@ -1,43 +1,25 @@
 ---
 
-- name: Configure New Relic sysmond
+- name: Configure New Relic infra
   become: yes
-  ini_file:
-    dest: /etc/newrelic/nrsysmond.cfg
+  template:
+    dest: /etc/newrelic-infra.yml
     group: "{{ sansible_newrelic_group }}"
     mode: 0640
-    no_extra_spaces: yes
     owner: "{{ sansible_newrelic_user }}"
-    section: "{{ item.section | default(None) }}"
-    option: "{{ item.option }}"
-    value: "{{ item.value }}"
-  when: sansible_newrelic_integrations_sysmond_enabled
-  with_items: "{{ [
-        {
-          'option': 'license_key',
-          'value': sansible_newrelic_license_key
-        },
-        {
-          'option': 'loglevel',
-          'value': sansible_newrelic_log_level
-        },
-        {
-          'option': 'labels',
-          'value': sansible_newrelic_labels
-        }
-      ] + sansible_newrelic_integrations_sysmond_ini_config
-    }}"
+    src: newrelic-infra.yml.j2
+  when: sansible_newrelic_integrations_infra_enabled
   notify:
-    - restart newrelic sysmond
+    - restart newrelic infra
 
-- name: Start New Relic Sysmond if start on boot enabled
+- name: Start New Relic Infra if start on boot enabled
   become: yes
   service:
-    name: newrelic-sysmond
+    name: newrelic-infra
     state: started
   when:
-    - sansible_newrelic_integrations_sysmond_enabled
-    - sansible_newrelic_integrations_sysmond_start_on_boot
+    - sansible_newrelic_integrations_infra_enabled
+    - sansible_newrelic_integrations_infra_start_on_boot
 
 - name: Configure New Relic PHP integration
   become: yes
@@ -74,9 +56,31 @@
           'option': 'newrelic.daemon.loglevel',
           'section': 'newrelic',
           'value': sansible_newrelic_log_level
+        },
+        {
+          'option': 'newrelic.process_host.display_name',
+          'section': 'newrelic',
+          'value': sansible_newrelic_integrations_infra_display_name
         }
       ] + sansible_newrelic_integrations_php_ini_config
     }}"
+
+- name: Configure New Relic PHP integration labels if set
+  become: yes
+  ini_file:
+    dest: "{{ sansible_newrelic_integrations_php_ini_paths_base }}"
+    mode: 0644
+    section: newrelic
+    option: newrelic.labels
+    value: "\"{%- set tmp_list = [] -%}
+              {%- for attribute_key, attribute_value in sansible_newrelic_labels.iteritems() -%}
+                {{ tmp_list.append(attribute_key + ':' + attribute_value) }}
+              {%- endfor -%}
+            {{ tmp_list |join(';') }}\""
+  when:
+    - sansible_newrelic_integrations_php_enabled
+    - sansible_newrelic_integrations_php_start_on_boot
+    - 'sansible_newrelic_labels | length > 0'
 
 - name: Enable New Relic PHP integration
   become: yes

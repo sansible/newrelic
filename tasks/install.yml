@@ -9,29 +9,31 @@
 - name: Ensure New Relic PGP key is known to the server
   become: yes
   apt_key:
-    id: 548C16BF
+    id: "{{ item }}"
     keyserver: hkp://keyserver.ubuntu.com:80
     state: present
+  with_items: "{{ sansible_newrelic_apt_key_ids }}"
 
 - name: Add New Relic APT repository
   become: yes
   apt_repository:
-    repo: "deb http://apt.newrelic.com/debian/ newrelic non-free"
+    repo: "{{ item }}"
     update_cache: yes
+  with_items: "{{ sansible_newrelic_apt_repos }}"
 
-- name: Install New Relic Sysmond
+- name: Install New Relic Infra
   become: yes
   apt:
-    pkg: "newrelic-sysmond={{ sansible_newrelic_integrations_sysmond_version }}"
+    pkg: "newrelic-infra={{ sansible_newrelic_integrations_infra_version }}"
     state: present
-  when: sansible_newrelic_integrations_sysmond_enabled
+  when: sansible_newrelic_integrations_infra_enabled
 
-- name: Disable New Relic Sysmond service on boot
+- name: Disable New Relic Infra service on boot
   become: yes
   service:
     enabled: false
-    name: newrelic-sysmond
-  when: sansible_newrelic_integrations_sysmond_enabled
+    name: newrelic-infra
+  when: sansible_newrelic_integrations_infra_enabled
 
 - name: Install New Relic PHP integration
   become: yes

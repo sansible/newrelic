@@ -14,20 +14,19 @@
 
   roles:
     - role: sansible.php
-      php:
-        version: php7.0
-        fpm:
-          bin: php-fpm7.0
-        paths:
-            etc: /etc/php/7.0
-            fpm_pool: /etc/php/7.0/fpm/pool.d
+      sansible_php_fpm_bin: php-fpm7.0
+      sansible_php_path_etc: /etc/php/7.0
+      sansible_php_path_fpm_pool: /etc/php/7.0/fpm/pool.d
+      sansible_php_version: php7.0
 
     - role: sansible.newrelic
       sansible_newrelic_appname: sansible-newrelic
-      sansible_newrelic_integrations_php_enabled: true
-      sansible_newrelic_integrations_php_start_on_boot: true
-      sansible_newrelic_integrations_sysmond_enabled: true
-      sansible_newrelic_labels: "org:sansible,role:newrelic"
+      sansible_newrelic_integrations_php_enabled: yes
+      sansible_newrelic_integrations_php_start_on_boot: yes
+      sansible_newrelic_integrations_infra_enabled: yes
+      sansible_newrelic_labels:
+        org: sansible
+        role: newrelic
       sansible_newrelic_license_key: 123456789123456789123456789123456789
 
   tasks:
@@ -44,21 +43,5 @@
       assert:
         that:
           - php_ini_config['content'] | b64decode | search('newrelic\.loglevel \= error')
-      tags:
-        - assert
-
-    - name: Grab Sysmond integration ini file contents
-      become: yes
-      slurp:
-        src: /etc/newrelic/nrsysmond.cfg
-      register: sysmond_ini_config
-      tags:
-        - assert
-
-    - name: Test Sysmond integration ini file contents
-      become: yes
-      assert:
-        that:
-          - sysmond_ini_config['content'] | b64decode | search('loglevel\=error')
       tags:
         - assert

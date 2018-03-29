@@ -2,7 +2,18 @@
 
 sansible_newrelic_appname: default
 sansible_newrelic_appname_prefix: ""
+sansible_newrelic_apt_key_ids:
+  - 8ECCE87C
+  - 548C16BF
+sansible_newrelic_apt_repos:
+  - "deb [arch=amd64] https://download.newrelic.com/infrastructure_agent/linux/apt trusty main"
+  - "deb http://apt.newrelic.com/debian/ newrelic non-free"
 sansible_newrelic_group: newrelic
+
+sansible_newrelic_integrations_infra_display_name: "{{ ansible_hostname }}"
+sansible_newrelic_integrations_infra_enabled: false
+sansible_newrelic_integrations_infra_start_on_boot: no
+sansible_newrelic_integrations_infra_version: "1.0.*"
 
 sansible_newrelic_integrations_php_enabled: false
 sansible_newrelic_integrations_php_ini_paths:
@@ -10,23 +21,11 @@ sansible_newrelic_integrations_php_ini_paths_base: /etc/php/7.0/mods-available/n
 sansible_newrelic_integrations_php_ini_paths_links:
   - /etc/php/7.0/fpm/conf.d/20-newrelic.ini
   - /etc/php/7.0/cli/conf.d/20-newrelic.ini
-sansible_newrelic_integrations_php_ini_config: [ ]
-  # - option: number_of_cats
-  #   section: mammals
-  #   value: 42
+sansible_newrelic_integrations_php_ini_config: []  # List of hashes: [ { option: some_option, section: some_section, value: some_value } ]
 sansible_newrelic_integrations_php_start_on_boot: no
 sansible_newrelic_integrations_php_version: "7.7.*"
 
-sansible_newrelic_integrations_sysmond_enabled: false
-sansible_newrelic_integrations_sysmond_ini_config: [ ]
-  # - option: number_of_cats
-  #   section: mammals
-  #   value: 42
-sansible_newrelic_integrations_sysmond_start_on_boot: no
-sansible_newrelic_integrations_sysmond_version: "2.3.*"
-
-# Format is: key:value,key:value
-sansible_newrelic_labels: ~
+sansible_newrelic_labels: {} # Hash: { key: value, key: value }
 sansible_newrelic_log_level: "error"
 sansible_newrelic_license_key: "changeme"
 sansible_newrelic_user: newrelic

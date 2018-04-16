@@ -20,7 +20,7 @@ To install run `ansible-galaxy install sansible.newrelic` or add this to your
 
 ```YAML
 - name: sansible.newrelic
-  version: v2.1
+  version: v2.2
 ```
 
 and run `ansible-galaxy install -p ./roles -r roles.yml`

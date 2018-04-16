@@ -25,7 +25,7 @@ sansible_newrelic_integrations_php_ini_config: []  # List of hashes: [ { option:
 sansible_newrelic_integrations_php_start_on_boot: no
 sansible_newrelic_integrations_php_version: "7.7.*"
 
-sansible_newrelic_labels: {} # Hash: { key: value, key: value }
+sansible_newrelic_labels: {}  # Hash: { key: value, key: value }
 sansible_newrelic_log_level: "error"
 sansible_newrelic_license_key: "changeme"
 sansible_newrelic_user: newrelic

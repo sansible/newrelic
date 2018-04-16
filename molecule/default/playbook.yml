@@ -1,16 +1,15 @@
 ---
 
-- name: Test New Relic role
+- name: Converge
   hosts: all
 
   pre_tasks:
-    - name: Update apt
+    - name: Install net-tools
       become: yes
       apt:
-        cache_valid_time: 1800
+        name: net-tools
         update_cache: yes
-      tags:
-        - build
+        cache_valid_time: 3600
 
   roles:
     - role: sansible.php
@@ -19,7 +18,7 @@
       sansible_php_path_fpm_pool: /etc/php/7.0/fpm/pool.d
       sansible_php_version: php7.0
 
-    - role: sansible.newrelic
+    - role: newrelic
       sansible_newrelic_appname: sansible-newrelic
       sansible_newrelic_integrations_php_enabled: yes
       sansible_newrelic_integrations_php_start_on_boot: yes
@@ -28,20 +27,3 @@
         org: sansible
         role: newrelic
       sansible_newrelic_license_key: 123456789123456789123456789123456789
-
-  tasks:
-    - name: Grab PHP integration ini file contents
-      become: yes
-      slurp:
-        src: "{{ sansible_newrelic_integrations_php_ini_paths_base }}"
-      register: php_ini_config
-      tags:
-        - assert
-
-    - name: Test PHP integration ini file contents
-      become: yes
-      assert:
-        that:
-          - php_ini_config['content'] | b64decode | search('newrelic\.loglevel \= error')
-      tags:
-        - assert

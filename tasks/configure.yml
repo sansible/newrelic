@@ -8,7 +8,7 @@
     mode: 0640
     owner: "{{ sansible_newrelic_user }}"
     src: newrelic-infra.yml.j2
-  when: sansible_newrelic_integrations_infra_enabled
+  when: sansible_newrelic_integrations_infra_enabled == true
   notify:
     - restart newrelic infra
 
@@ -18,8 +18,8 @@
     name: newrelic-infra
     state: started
   when:
-    - sansible_newrelic_integrations_infra_enabled
-    - sansible_newrelic_integrations_infra_start_on_boot
+    - sansible_newrelic_integrations_infra_enabled == true
+    - sansible_newrelic_integrations_infra_start_on_boot == true
 
 - name: Configure New Relic PHP integration
   become: yes
@@ -30,8 +30,8 @@
     option: "{{ item.option }}"
     value: "{{ item.value }}"
   when:
-    - sansible_newrelic_integrations_php_enabled
-    - sansible_newrelic_integrations_php_start_on_boot
+    - sansible_newrelic_integrations_php_enabled == true
+    - sansible_newrelic_integrations_php_start_on_boot == true
   with_items: "{{ [
         {
           'option': 'extension',
@@ -78,8 +78,8 @@
               {%- endfor -%}
             {{ tmp_list |join(';') }}\""
   when:
-    - sansible_newrelic_integrations_php_enabled
-    - sansible_newrelic_integrations_php_start_on_boot
+    - sansible_newrelic_integrations_php_enabled == true
+    - sansible_newrelic_integrations_php_start_on_boot == true
     - 'sansible_newrelic_labels | length > 0'
 
 - name: Enable New Relic PHP integration
@@ -90,5 +90,5 @@
     state: link
   with_items: "{{ sansible_newrelic_integrations_php_ini_paths_links }}"
   when:
-    - sansible_newrelic_integrations_php_enabled
-    - sansible_newrelic_integrations_php_start_on_boot
+    - sansible_newrelic_integrations_php_enabled == true
+    - sansible_newrelic_integrations_php_start_on_boot == true

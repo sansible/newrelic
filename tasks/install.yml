@@ -26,21 +26,30 @@
   apt:
     pkg: "newrelic-infra={{ sansible_newrelic_integrations_infra_version }}"
     state: present
-  when: sansible_newrelic_integrations_infra_enabled
+  when: sansible_newrelic_integrations_infra_enabled == true
+
+- name: Ensure New Relic Infra log directory exists
+  become: yes
+  file:
+    group: "{{ sansible_newrelic_group }}"
+    owner: "{{ sansible_newrelic_user}}"
+    path: /var/log/newrelic
+    state: directory
+  when: sansible_newrelic_integrations_infra_enabled == true
 
 - name: Disable New Relic Infra service on boot
   become: yes
   service:
     enabled: false
     name: newrelic-infra
-  when: sansible_newrelic_integrations_infra_enabled
+  when: sansible_newrelic_integrations_infra_enabled == true
 
 - name: Install New Relic PHP integration
   become: yes
   apt:
     pkg: "{{ item }}"
     state: present
-  when: sansible_newrelic_integrations_php_enabled
+  when: sansible_newrelic_integrations_php_enabled == true
   with_items:
     - "newrelic-php5-common={{ sansible_newrelic_integrations_php_version }}"
     - "newrelic-daemon={{ sansible_newrelic_integrations_php_version }}"

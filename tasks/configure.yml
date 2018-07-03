@@ -35,7 +35,7 @@
   with_items: "{{ [
         {
           'option': 'extension',
-          'value': '/usr/lib/php/20151012/newrelic.so'
+          'value': 'newrelic.so'
         },
         {
           'option': 'newrelic.license',
